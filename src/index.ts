@@ -29,3 +29,25 @@ map.fitBounds(L.latLngBounds([[-48, 179], [-33, 164]]), {});
 
 //TODO: Only on first load
 $('#modal-welcome').modal('show');
+
+const loggedIn = true;
+
+$('#top-place-decoration').click(() => {
+	if (loggedIn) {
+		let marker = L.marker(map.getCenter(), {
+			draggable: true
+			//TODO: Icon
+		})
+		//TODO: Appear animation would be cool
+		map.addLayer(marker);
+
+		map.on('click', (ev) => {
+			marker.setLatLng((<L.MouseEvent>ev).latlng);
+		})
+
+		$('#placement-confirm-box').removeClass('hidden');
+		$('#placement-instructions').removeClass('hidden');
+	} else {
+		$('#modal-login').modal('show');
+	}
+})

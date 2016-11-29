@@ -8,7 +8,7 @@ body {
 	background-color: white;
 }
 #map {
-	background-color: lightgreen;
+	background-color: #4a131d;
 	width: 100%;
 	height: calc(100% - 60px);
 }
@@ -24,31 +24,26 @@ body {
 	top: 7px;
 }
 
-#sign-in-overlay {
-	position: absolute;
-	top: 100px;
-	left: 100px;
-	right: 100px;
-
-	padding: 10px;
-	background-color: lightgrey;
-
-
-	box-shadow: 0 0 10px 4px black;
-	border-radius: 4px;
-
-	z-index: 1000;
-}
-
-#file-text-input {
-	width: 100%;
-	height: 200px;
-}
-
-.strike-through {
-	text-decoration: line-through;
-}
-
 .btn-social {
 	max-width: 200px;
+}
+
+#placement-confirm-box, #placement-instructions {
+	position: absolute;
+	text-align: center;
+	z-index: 1000;
+	pointer-events: none;
+	width: 100%;
+}
+#placement-confirm-box {
+	bottom: 20px;
+}
+
+#placement-instructions {
+	top: 65px;
+}
+
+#placement-confirm-box .btn-group {
+	pointer-events: all;
+	display: inline-block;
 }
