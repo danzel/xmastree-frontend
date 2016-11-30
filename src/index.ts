@@ -31,7 +31,13 @@ let decorationPlacingManager = new DecorationPlacingManager(map, serverComms);
 serverComms.getStatus((res) => {
 	status = res;
 
-	showButton();
+	showAddDecorationButton();
+
+	if (status.authenticated) {
+		$('#top-logout').removeClass('hidden').on('click', () => {
+			window.location.assign('/api/logout'); //TODO: URL
+		})
+	}
 });
 serverComms.getAllDecorations((res) => {
 	if (!res.success) {
@@ -56,7 +62,7 @@ decorationPlacingManager.onComplete = (nextDecoration, now) => {
 
 const loggedIn = true;
 
-function showButton() {
+function showAddDecorationButton() {
 	//Global click handlers
 	$('#top-place-decoration').removeClass('hidden').click(() => {
 		if (decorationPlacingManager.enabled) {
