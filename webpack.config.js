@@ -19,6 +19,7 @@ module.exports = {
 		loaders: [
 			{ test: /\.tsx?$/, loader: 'ts-loader' },
 			{ test: /\.css$/, loader: ExtractTextPlugin.extract("css-loader") },
+			{ test: /\.svg$/, loader: 'file-loader?name=[hash].[ext]' },
 		]
 	},
 	plugins: [
