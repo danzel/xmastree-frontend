@@ -58,7 +58,12 @@ serverComms.getAllDecorations((res) => {
 	}
 
 	res.decorations.forEach(d => {
-		map.addLayer(L.imageOverlay(Resources.decorationImages[d[2]], Resources.padLatLngForDecoration(L.latLng(d[1], d[0]), d[2])));
+		try {
+			map.addLayer(L.imageOverlay(Resources.decorationImages[d[2]], Resources.padLatLngForDecoration(L.latLng(d[1], d[0]), d[2])));
+		}
+		catch (err) {
+			console.log('failed to add decoration server returned', err);
+		}
 	})
 })
 
