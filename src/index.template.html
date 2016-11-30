@@ -15,7 +15,7 @@
 	<div id="top">
 		<div id="title">XmasTree.io</div>
 		<span id="subtext">The Collaborative Christmas Tree</span>
-		<button type="button" class="btn btn-lg btn-primary" id="top-place-decoration">
+		<button type="button" class="btn btn-lg btn-primary hidden" id="top-place-decoration">
 			 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 			Place a decoration
 		</button>
@@ -77,8 +77,9 @@
 	</div>
 	<div id="placement-confirm-box" class="hidden">
 		<div class="btn-group btn-group-lg">
-			<button type="button" class="btn btn-danger">Cancel</button>
-			<button type="button" class="btn btn-success">Place my Decoration</button>
+			<button type="button" id="placement-cancel" class="btn btn-danger">Cancel</button>
+			<button type="button" id="placement-locate" class="btn btn-info">Locate</button>
+			<button type="button" id="placement-place" class="btn btn-success">Place my Decoration</button>
 		</div>
 	</div>
 

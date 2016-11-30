@@ -3,107 +3,70 @@ import './index.css';
 import * as L from 'leaflet';
 import * as $ from 'jquery';
 
+import { DecorationPlacingManager } from './decorationPlacingManager';
+import { JustDate } from './justDate';
+import * as Resources from './resources';
+import * as ServerComms from './serverComms';
 
-declare function require(fileName: string): string;
-var treeSvg = require('./images/tree.svg');
-
-var decorationImages = [
-	require('./images/decorations/big-yellow-right.svg')
-]
-
-
-/*
-document.getElementById('load-data').onclick = () => {
-	alert('lets go');
-}*/
-
-//let initialBounds = L.latLngBounds([[0, 0], [1000, 1000]]);
+//Configure the map
 let maxPlacementBounds = L.latLngBounds([[150, 220], [1000, 780]])
 let map = L.map('map', {
 	crs: L.CRS.Simple,
 	minZoom: -1,
 	layers:
 	[
-		L.imageOverlay(treeSvg, L.latLngBounds([[0, 0], [1000, 1000]]), {
+		L.imageOverlay(Resources.treeSvg, L.latLngBounds([[0, 0], [1000, 1000]]), {
 			attribution: 'TODO that image site'
 		})
 	],
 });
 map.fitBounds(maxPlacementBounds, {});
-map.on('zoom', () => {
-	console.log(map.getZoom());
-})
-map.on('click', (ev) => {
-	let mev = <L.MouseEvent>ev;
-	console.log('mc', mev.latlng.lat, mev.latlng.lng);
-})
 
+//State
+let status: ServerComms.StatusResponse;
 
+//Managers
+let serverComms = new ServerComms.FakeServerComms();
+let decorationPlacingManager = new DecorationPlacingManager(map, serverComms);
+
+serverComms.getStatus((res) => {
+	status = res;
+
+	showButton();
+});
+serverComms.getAllDecorations((res) => {
+	if (!res.success) {
+		alert('Failed to load decorations. Server is probably down. Try again soon!');
+		return;
+	}
+
+	res.decorations.forEach(d => {
+		map.addLayer(L.imageOverlay(Resources.decorationImages[d[2]], Resources.padLatLngForDecoration(L.latLng(d[1], d[0]), d[2])));
+	})
+})
 
 //TODO: Only on first load
 //TODO $('#modal-welcome').modal('show');
 
 const loggedIn = true;
 
-$('#top-place-decoration').click(() => {
-	if (loggedIn) {
+function showButton() {
+	//Global click handlers
+	$('#top-place-decoration').removeClass('hidden').click(() => {
+		if (decorationPlacingManager.enabled) {
+			return;
+		}
 
-		//TODO: Find a random place, zoom down to it
-		//TODO: highlight the placing one somehow
-
-		map.setZoom(4, {});
-
-		let center = map.getCenter();
-		let marker = L.imageOverlay(decorationImages[0],
-			L.latLngBounds([center.lat - 5, center.lng - 5], [center.lat + 5, center.lng + 5]), { interactive: true }
-		);
-
-		//TODO: Appear animation would be cool
-		map.addLayer(marker);
-
-		L.DomEvent.disableClickPropagation((<any>marker)._image);
-
-		let draggable = new (<any>L).Draggable((<any>marker)._image);
-		draggable.enable();
-
-		draggable.on('dragend', () => {
-			let endPos = L.DomUtil.getPosition((<any>marker)._image);
-
-			endPos = endPos.add([(<any>marker)._image.clientWidth / 2,(<any>marker)._image.clientHeight / 2]);
-
-			let endLatLng = map.layerPointToLatLng(endPos);
-
-			(<any>marker).setBounds(L.latLngBounds([[endLatLng.lat - 5, endLatLng.lng - 5], [endLatLng.lat + 5, endLatLng.lng + 5]]));
-
-		})
-
-
-		map.on('click', (ev) => {
-			let latlng = (<L.MouseEvent>ev).latlng;
-
-			(<any>marker).setBounds(L.latLngBounds([[latlng.lat - 5, latlng.lng - 5], [latlng.lat + 5, latlng.lng + 5]]));
-		})
-
-		$('#placement-confirm-box').removeClass('hidden');
-		$('#placement-instructions').removeClass('hidden');
-	} else {
-		$('#modal-login').modal('show');
-	}
-})
-
-$.ajax({
-	method: 'POST',
-	url: 'http://localhost:3000/api/decorations/add/v1',
-	xhrFields: {
-		withCredentials: true
-	},
-	data: {
-		x: 1,
-		y: 1,
-		date: 20161130
-	}
-}).done(res => {
-	console.log('done', res);
-}).fail(res => {
-	console.log('fail', res);
-})
+		if (status.authenticated) {
+			let now = JustDate.now();
+			if (now.value == status.dateLastPlaced) {
+				//TODO: Nice looking alert
+				alert('You have already placed a decoration today. Come back tomorrow')
+			} else {
+				decorationPlacingManager.start();
+			}
+		} else {
+			$('#modal-login').modal('show');
+		}
+	})
+}
