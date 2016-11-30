@@ -1,5 +1,7 @@
 import { JustDate } from './justDate';
 
+export const serverBaseUrl = 'http://localhost:3000';
+
 export interface StatusResponse {
 	authenticated: boolean;
 
@@ -31,7 +33,7 @@ export interface GetAllDecorationsResponse {
 }
 
 export interface ServerComms {
-	getStatus(callback: (res: StatusResponse) => void): void;
+	getStatus(callback: (err: Error, res: StatusResponse) => void): void;
 
 	addDecoration(x: number, y: number, when: JustDate, callback: (res: AddDecorationResponse) => void): void;
 
@@ -39,9 +41,9 @@ export interface ServerComms {
 }
 
 export class FakeServerComms implements ServerComms {
-	getStatus(callback: (res: StatusResponse) => void): void {
+	getStatus(callback: (err: Error, res: StatusResponse) => void): void {
 		setTimeout(() => {
-			callback({
+			callback(null, {
 				authenticated: true,
 				amountPlaced: 0,
 				nextDecoration: 0
@@ -63,33 +65,75 @@ export class FakeServerComms implements ServerComms {
 			callback({
 				success: true,
 				decorations: [
-					[ 500, 500, 0],
-					[ 500, 400, 0],
-					[ 200, 500, 0]
+					[500, 500, 0],
+					[500, 400, 0],
+					[200, 500, 0]
 				]
 			})
 		}, 1000)
 	}
 }
 
-
-
-
-//DEBUG
-/*
-$.ajax({
-	method: 'POST',
-	url: 'http://localhost:3000/api/decorations/add/v1',
-	xhrFields: {
-		withCredentials: true
-	},
-	data: {
-		x: 1,
-		y: 1,
-		date: 20161130
+export class RealServerComms implements ServerComms {
+	getStatus(callback: (err: Error, res: StatusResponse) => void): void {
+		$.ajax({
+			method: 'GET',
+			url: serverBaseUrl + '/api/status/v1',
+			xhrFields: {
+				withCredentials: true
+			}
+		}).done(res => {
+			callback(null, res);
+		}).fail((err: Error) => {
+			callback(err, null);
+		})
 	}
-}).done(res => {
-	console.log('done', res);
-}).fail(res => {
-	console.log('fail', res);
-})*/
+
+	addDecoration(x: number, y: number, when: JustDate, callback: (res: AddDecorationResponse) => void): void {
+		$.ajax({
+			method: 'POST',
+			url: serverBaseUrl + '/api/decorations/add/v1',
+			xhrFields: {
+				withCredentials: true
+			},
+			contentType: "application/json; charset=utf-8",
+			data: JSON.stringify({
+				x,
+				y,
+				date: when.value
+			}),
+		}).done(res => {
+			callback({
+				success: true,
+				nextDecoration: res.nextDecoration
+			})
+		}).fail(err => {
+			console.log(err)
+			callback({
+				success: false,
+				nextDecoration: null
+			})
+		})
+	}
+
+	getAllDecorations(callback: (res: GetAllDecorationsResponse) => void): void {
+		$.ajax({
+			method: 'GET',
+			url: serverBaseUrl + '/api/decorations/v1',
+			xhrFields: {
+				withCredentials: true
+			}
+		}).done(res => {
+			callback({
+				decorations: res.decorations,
+				success: true
+			})
+		}).fail((err: Error) => {
+			console.log(err)
+			callback({
+				success: false,
+				decorations: null
+			});
+		})
+	}
+}

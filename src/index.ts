@@ -21,14 +21,25 @@ let map = L.map('map', {
 });
 map.fitBounds(Resources.maxPlacementBounds, {});
 
+
+//Set up auth buttons
+$('a.btn-twitter').attr('href', ServerComms.serverBaseUrl + '/auth/twitter');
+$('a.btn-facebook').attr('href', ServerComms.serverBaseUrl + '/auth/facebook');
+$('a.btn-google').attr('href', ServerComms.serverBaseUrl + '/auth/google');
+
 //State
 let status: ServerComms.StatusResponse;
 
 //Managers
-let serverComms = new ServerComms.FakeServerComms();
+//let serverComms = new ServerComms.FakeServerComms();
+let serverComms = new ServerComms.RealServerComms();
 let decorationPlacingManager = new DecorationPlacingManager(map, serverComms);
 
-serverComms.getStatus((res) => {
+serverComms.getStatus((err, res) => {
+	if (err) {
+		//TODO: Nice looking alert
+		alert('Failed to get status. Server is probably down. Try again soon!')
+	}
 	status = res;
 
 	showAddDecorationButton();
