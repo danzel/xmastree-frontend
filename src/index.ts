@@ -51,3 +51,20 @@ $('#top-place-decoration').click(() => {
 		$('#modal-login').modal('show');
 	}
 })
+
+$.ajax({
+	method: 'POST',
+	url: 'http://localhost:3000/api/decorations/add/v1',
+	xhrFields: {
+		withCredentials: true
+	},
+	data: {
+		x: 1,
+		y: 1,
+		date: 20161130
+	}
+}).done(res => {
+	console.log('done', res);
+}).fail(res => {
+	console.log('fail', res);
+})
