@@ -2,6 +2,9 @@ declare function require(fileName: string): string;
 
 export const treeSvg = require('./images/tree.svg');
 
+export const maxPlacementBounds = L.latLngBounds([[150, 220], [1000, 780]])
+
+
 export const decorationImages = [
 	require('./images/decorations/big-yellow-right.svg')
 ];

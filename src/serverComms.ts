@@ -42,7 +42,9 @@ export class FakeServerComms implements ServerComms {
 	getStatus(callback: (res: StatusResponse) => void): void {
 		setTimeout(() => {
 			callback({
-				authenticated: false
+				authenticated: true,
+				amountPlaced: 0,
+				nextDecoration: 0
 			})
 		}, 1000)
 	}
