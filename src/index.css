@@ -47,3 +47,18 @@ body {
 	pointer-events: all;
 	display: inline-block;
 }
+
+#social-sharing-buttons {
+	position: absolute;
+	top: 65px;
+	left: 0;
+	right: 0;
+	pointer-events: none;
+	text-align: center;
+	z-index: 999;
+}
+#social-sharing-buttons > * {
+	pointer-events: all;
+	vertical-align: top;
+	display: inline-block;
+}

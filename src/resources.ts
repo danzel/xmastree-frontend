@@ -1,5 +1,9 @@
 declare function require(fileName: string): string;
 
+require('./favicon.png');
+require('./favicon.ico');
+
+
 export const treeSvg = require('./images/tree.svg');
 
 export const maxPlacementBounds = L.latLngBounds([[150, 220], [1000, 780]])

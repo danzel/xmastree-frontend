@@ -65,7 +65,7 @@ function showButton() {
 
 		if (status.authenticated) {
 			let now = JustDate.now();
-			if (now.value == status.dateLastPlaced) {
+			if (now.value <= status.dateLastPlaced) {
 				//TODO: Nice looking alert
 				alert('You have already placed a decoration today. Come back tomorrow')
 			} else {
