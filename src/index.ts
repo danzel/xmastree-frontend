@@ -50,10 +50,6 @@ $('#top-place-decoration').click(() => {
 
 		//TODO: Find a random place, zoom down to it
 		//TODO: highlight the placing one somehow
-		/*let marker = L.marker(map.getCenter(), {
-			draggable: true
-			//TODO: Icon
-		})*/
 
 		map.setZoom(4, {});
 
@@ -61,9 +57,12 @@ $('#top-place-decoration').click(() => {
 		let marker = L.imageOverlay(decorationImages[0],
 			L.latLngBounds([center.lat - 5, center.lng - 5], [center.lat + 5, center.lng + 5]), { interactive: true }
 		);
-		//console.log(marker);
+
 		//TODO: Appear animation would be cool
 		map.addLayer(marker);
+
+		L.DomEvent.disableClickPropagation((<any>marker)._image);
+
 		let draggable = new (<any>L).Draggable((<any>marker)._image);
 		draggable.enable();
 
@@ -80,7 +79,9 @@ $('#top-place-decoration').click(() => {
 
 
 		map.on('click', (ev) => {
-			//marker.setLatLng((<L.MouseEvent>ev).latlng);
+			let latlng = (<L.MouseEvent>ev).latlng;
+
+			(<any>marker).setBounds(L.latLngBounds([[latlng.lat - 5, latlng.lng - 5], [latlng.lat + 5, latlng.lng + 5]]));
 		})
 
 		$('#placement-confirm-box').removeClass('hidden');
