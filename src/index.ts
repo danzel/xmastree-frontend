@@ -45,7 +45,7 @@ serverComms.getStatus((err, res) => {
 
 	if (status.authenticated) {
 		$('#top-logout').removeClass('hidden').on('click', () => {
-			window.location.assign('/api/logout'); //TODO: URL
+			window.location.assign(ServerComms.serverBaseUrl + '/logout');
 		})
 	}
 });
