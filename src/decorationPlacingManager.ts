@@ -61,6 +61,7 @@ export class DecorationPlacingManager {
 					this.draggable.disable();
 					//Undo the interactive flag
 					L.DomUtil.removeClass((<any>this.marker)._image, 'leaflet-interactive');
+					$((<any>this.marker)._image).removeClass('pulsate');
 					(<any>this.marker).removeInteractiveTarget((<any>this.marker)._image);
 
 					//TODO: Undo disableClickPropagation?
@@ -85,20 +86,35 @@ export class DecorationPlacingManager {
 	start(decorationIndex: number) {
 		this.enabled = true;
 		this.decorationIndex = decorationIndex;
-		//TODO: Find a random place, zoom down to it
 		//TODO: highlight the placing one somehow
 
-		this.map.flyTo(this.map.getCenter(), 4, { easeLinearity: 6, duration: 1 });
 
-		let center = this.map.getCenter();
+		//Random placing
+		//http://stackoverflow.com/questions/19654251/random-point-inside-triangle-inside-java
+		let r1 = Math.random();
+		let r2 = Math.random();
+		
+		//Triangle corners (roughly) of the tree
+		let ax = 342;
+		let ay = 239;
+		let bx = 308;
+		let by = 760;
+		let cx = 953;
+		let cy = 500;
+		let x = (1 - Math.sqrt(r1)) * ax + (Math.sqrt(r1) * (1 - r2)) * bx + (Math.sqrt(r1) * r2) * cx;
+		let y = (1 - Math.sqrt(r1)) * ay + (Math.sqrt(r1) * (1 - r2)) * by + (Math.sqrt(r1) * r2) * cy;
+		let center = L.latLng(x, y);
+
 		this.marker = L.imageOverlay(Resources.decorationImages[decorationIndex],
 			Resources.padLatLngForDecoration(center, decorationIndex), { interactive: true }
 		);
 
 		//TODO: Appear animation would be cool
 		this.map.addLayer(this.marker);
+		this.map.flyTo(center, 4, { easeLinearity: 6, duration: 1 });
 
 		L.DomEvent.disableClickPropagation((<any>this.marker)._image);
+		$((<any>this.marker)._image).addClass('pulsate');
 
 		this.draggable = new (<any>L).Draggable((<any>this.marker)._image);
 		this.draggable.enable();

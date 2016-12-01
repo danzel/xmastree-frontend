@@ -115,3 +115,21 @@ body {
 .leaflet-control-zoom {
     border: 2px solid rgba(255,255,255,0.2) !important;
 }
+
+
+/* Placement animations */
+.pulsate {
+	animation: pulsate 1s ease-out;
+	animation-iteration-count: infinite; 
+}
+@keyframes pulsate {
+	0% { 
+		filter: brightness(1.2);
+	}
+	50% { 
+		filter: brightness(1);
+	}
+	100% { 
+		filter: brightness(1.2);
+	}
+}
