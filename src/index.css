@@ -62,3 +62,7 @@ body {
 	vertical-align: top;
 	display: inline-block;
 }
+
+.leaflet-control-attribution {
+	font-size: 14px !important;
+}

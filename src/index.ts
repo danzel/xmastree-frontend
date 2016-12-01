@@ -15,12 +15,11 @@ let map = L.map('map', {
 	layers:
 	[
 		L.imageOverlay(Resources.treeSvg, L.latLngBounds([[0, 0], [1000, 1000]]), {
-			attribution: 'TODO that image site'
+			attribution: '<a href="#" data-toggle="modal" data-target="#modal-attribution">Attribution</a> | <a href="https://docs.google.com/a/cozybarrel.com/forms/d/e/1FAIpQLSdrXYeI1JfL-xOTE4iTlB5H9p2Y4AEbhnYrygKrJsEK-EUJag/viewform" target="_blank">Contact and Feedback</a>'
 		})
 	],
 });
 map.fitBounds(Resources.maxPlacementBounds, {});
-
 
 //Set up auth buttons
 $('a.btn-twitter').attr('href', ServerComms.serverBaseUrl + '/auth/twitter');
