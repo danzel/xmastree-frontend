@@ -1,6 +1,7 @@
 import { JustDate } from './justDate';
 
-export const serverBaseUrl = 'http://localhost:3000';
+//export const serverBaseUrl = 'http://localhost:3000';
+export const serverBaseUrl = 'https://api.xmastree.io';
 
 export interface StatusResponse {
 	authenticated: boolean;

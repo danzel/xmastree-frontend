@@ -2,6 +2,7 @@ body {
 	margin: 0;
 	font-family: 'Roboto Mono', monospace;
 	overflow: hidden;
+	height: 100%;
 }
 
 #top {
@@ -104,7 +105,7 @@ body {
 	color: white !important;
     border-bottom-color: rgba(255,255,255,0.5);
 }
-.leaflet-touch .leaflet-bar a {
+.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	background-color: #a62c59 !important;
 	color: white !important;
 	width: 40px !important;
