@@ -47,6 +47,8 @@ serverComms.getStatus((err, res) => {
 		$('#top-logout').removeClass('hidden').on('click', () => {
 			window.location.assign(ServerComms.serverBaseUrl + '/logout');
 		})
+	} else {
+		$('#modal-welcome').modal('show');
 	}
 });
 serverComms.getAllDecorations((res) => {
@@ -71,9 +73,6 @@ decorationPlacingManager.onComplete = (nextDecoration, now) => {
 	status.dateLastPlaced = now.value;
 	status.nextDecoration = nextDecoration;
 }
-
-//TODO: Only on first load
-//TODO $('#modal-welcome').modal('show');
 
 const loggedIn = true;
 
