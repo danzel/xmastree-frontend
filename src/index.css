@@ -76,7 +76,7 @@ body {
 #social-sharing-buttons {
 	position: absolute;
 	bottom: 10px;
-	left: 10;
+	left: 10px;
 	pointer-events: none;
 	text-align: center;
 	z-index: 999;
@@ -131,5 +131,47 @@ body {
 	}
 	100% { 
 		filter: brightness(1.2);
+	}
+}
+
+/* Make things fit on mobile */
+@media (max-width: 670px) {
+
+	.btn-lg, .btn-group-lg>.btn {
+		padding: 5px 8px !important;
+		font-size: 14px !important;
+	}
+
+	#placement-instructions {
+		top: 82px
+	}
+	#placement-instructions .btn {
+		font-size: 12px !important;
+	}
+
+	#title {
+		font-size: 20px;
+	}
+
+	#title, #subtext {
+		padding: 1px 10px;
+	}
+
+	#top-button-container {
+		top: 54px;
+	}
+
+	#placement-confirm-box {
+		bottom: 50px;
+	}
+
+	#social-sharing-buttons {
+		bottom: 5px;
+    	left: 5px;
+	}
+
+	.leaflet-control-attribution {
+		width: 180px;
+		text-align: right;
 	}
 }
