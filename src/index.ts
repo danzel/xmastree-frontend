@@ -30,8 +30,8 @@ $('a.btn-google').attr('href', ServerComms.serverBaseUrl + '/auth/google');
 let status: ServerComms.StatusResponse;
 
 //Managers
-//let serverComms = new ServerComms.FakeServerComms();
-let serverComms = new ServerComms.RealServerComms();
+let serverComms = new ServerComms.FakeServerComms();
+//let serverComms = new ServerComms.RealServerComms();
 let decorationPlacingManager = new DecorationPlacingManager(map, serverComms);
 
 serverComms.getStatus((err, res) => {
